@@ -20,5 +20,9 @@ namespace TrashCollectorMVP.Models
         [ForeignKey("WeeklyPickupDay")]
         public int WeeklyPickUpDayId { get; set; }
         public WeeklyPickupDay WeeklyPickUpDay { get; set; }
+        
+        [ForeignKey("IdentityUser")]
+        public string IdentityUserId { get; set; }
+        public IdentityUser IdentityUser { get; set; }
     }
 }
