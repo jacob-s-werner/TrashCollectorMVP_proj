@@ -52,7 +52,7 @@ namespace TrashCollectorMVP.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id");
+            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Day");
             return View();
         }
 
@@ -71,7 +71,7 @@ namespace TrashCollectorMVP.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id", customer.WeeklyPickUpDayId);
+            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Day", customer.WeeklyPickUpDayId);
             return View(customer);
         }
 
@@ -88,7 +88,7 @@ namespace TrashCollectorMVP.Controllers
             {
                 return NotFound();
             }
-            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id", customer.WeeklyPickUpDayId);
+            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Day", customer.WeeklyPickUpDayId);
             return View(customer);
         }
 
@@ -126,7 +126,7 @@ namespace TrashCollectorMVP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id", customer.WeeklyPickUpDayId);
+            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Day", customer.WeeklyPickUpDayId);
             return View(customer);
         }
 
