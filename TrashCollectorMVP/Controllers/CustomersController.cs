@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +52,6 @@ namespace TrashCollectorMVP.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id");
             return View();
         }
@@ -61,15 +61,16 @@ namespace TrashCollectorMVP.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Address,ZipCode,WeeklyPickUpDayId,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Address,ZipCode,WeeklyPickUpDayId")] Customer customer)
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer.IdentityUserId = userId;
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id", customer.WeeklyPickUpDayId);
             return View(customer);
         }
@@ -87,7 +88,6 @@ namespace TrashCollectorMVP.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id", customer.WeeklyPickUpDayId);
             return View(customer);
         }
@@ -97,7 +97,7 @@ namespace TrashCollectorMVP.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Address,ZipCode,WeeklyPickUpDayId,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Address,ZipCode,WeeklyPickUpDayId")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -108,6 +108,8 @@ namespace TrashCollectorMVP.Controllers
             {
                 try
                 {
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    customer.IdentityUserId = userId;
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
@@ -124,7 +126,6 @@ namespace TrashCollectorMVP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Id", customer.WeeklyPickUpDayId);
             return View(customer);
         }
