@@ -229,7 +229,7 @@ namespace TrashCollectorMVP.Controllers
             return _context.OneTimePickups.Any(e => e.Id == id);
         }
 
-        // GET: Customers/CreateOneTimePickup
+        // GET: Customers/CreateTemporaryPickupSuspension
         public IActionResult CreateTemporaryPickupSuspension()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -237,7 +237,7 @@ namespace TrashCollectorMVP.Controllers
             return View();
         }
 
-        // POST: Customers/CreateOneTimePickup
+        // POST: Customers/CreateTemporaryPickupSuspension
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -254,6 +254,42 @@ namespace TrashCollectorMVP.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(temporaryPickupSuspension);
+        }
+
+        // GET: Customers/DeleteTemporaryPickupSuspension/5
+        public async Task<IActionResult> DeleteTemporaryPickupSuspension(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var oneTimePickup = await _context.OneTimePickups
+                .Include(c => c.IdentityUser)
+                .Include(c => c.Customer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (oneTimePickup == null)
+            {
+                return NotFound();
+            }
+
+            return View(oneTimePickup);
+        }
+
+        // POST: Customers/DeleteTemporaryPickupSuspension/5
+        [HttpPost, ActionName("DeleteTemporaryPickupSuspension")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTemporaryPickupSuspensionConfirmed(int id)
+        {
+            var temporaryPickupSuspension = await _context.TemporaryPickupSuspensions.FindAsync(id);
+            _context.TemporaryPickupSuspensions.Remove(temporaryPickupSuspension);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool TemporaryPickupSuspensionExists(int id)
+        {
+            return _context.TemporaryPickupSuspensions.Any(e => e.Id == id);
         }
     }
 }
