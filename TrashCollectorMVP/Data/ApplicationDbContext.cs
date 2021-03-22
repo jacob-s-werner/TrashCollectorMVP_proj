@@ -18,6 +18,8 @@ namespace TrashCollectorMVP.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<WeeklyPickupDay> WeeklyPickupDays { get; set; }
         public DbSet<OneTimePickup> OneTimePickups { get; set; }
+        public DbSet<TemporaryPickupSuspension> TemporaryPickupSuspensions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
