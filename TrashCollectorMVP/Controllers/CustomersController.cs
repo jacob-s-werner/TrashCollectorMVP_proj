@@ -228,5 +228,32 @@ namespace TrashCollectorMVP.Controllers
         {
             return _context.OneTimePickups.Any(e => e.Id == id);
         }
+
+        // GET: Customers/CreateOneTimePickup
+        public IActionResult CreateTemporaryPickupSuspension()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewData["CustomerId"] = new SelectList(_context.Customers.Where(c => c.IdentityUserId == userId), "Id", "Address");
+            return View();
+        }
+
+        // POST: Customers/CreateOneTimePickup
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTemporaryPickupSuspension([Bind("Id, StartDate, EndDate,CustomerId")] TemporaryPickupSuspension temporaryPickupSuspension)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                temporaryPickupSuspension.IdentityUserId = userId;
+                temporaryPickupSuspension.ZipCode = _context.Customers.Where(c => c.Id == temporaryPickupSuspension.CustomerId).Select(c => c.ZipCode).SingleOrDefault();
+                _context.Add(temporaryPickupSuspension);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(temporaryPickupSuspension);
+        }
     }
 }
