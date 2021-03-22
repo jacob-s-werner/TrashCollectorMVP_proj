@@ -27,13 +27,18 @@ namespace TrashCollectorMVP.Data
             .HasData(
             new IdentityRole
             {
+                Id = "57238b69-e427-4c16-a1b5-9622ffe269c8",
                 Name = "Customer",
-                NormalizedName = "CUSTOMER"
+                NormalizedName = "CUSTOMER",
+                ConcurrencyStamp = "7ac58623-4d24-4301-ba6e-df7cb0e5b724"
+
             },
             new IdentityRole
             {
+                Id = "b953561e-ff29-4a5f-aa9a-53c023680f13",
                 Name = "Employee",
-                NormalizedName = "EMPLOYEE"
+                NormalizedName = "EMPLOYEE",
+                ConcurrencyStamp = "41376ad9-5200-46fb-9b91-c959c77c00a2"
             }
             );
             builder.Entity<WeeklyPickupDay>()
