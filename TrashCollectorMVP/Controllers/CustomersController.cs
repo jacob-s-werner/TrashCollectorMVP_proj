@@ -165,5 +165,32 @@ namespace TrashCollectorMVP.Controllers
         {
             return _context.Customers.Any(e => e.Id == id);
         }
+
+        // GET: Customers/CreateOneTimePickup
+        public IActionResult CreateOneTimePickup()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewData["CustomerId"] = new SelectList(_context.Customers.Where(c => c.IdentityUserId == userId), "Id", "Address");
+            return View();
+        }
+
+        // POST: Customers/CreateOneTimePickup
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateOneTimePickup([Bind("Id, DateForPickup,CustomerId")] OneTimePickup oneTimePickup)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                oneTimePickup.IdentityUserId = userId;
+                oneTimePickup.ZipCode = _context.Customers.Where(c => c.Id == oneTimePickup.CustomerId).Select(c => c.ZipCode).SingleOrDefault();
+                _context.Add(oneTimePickup);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(oneTimePickup);
+        }
     }
 }
