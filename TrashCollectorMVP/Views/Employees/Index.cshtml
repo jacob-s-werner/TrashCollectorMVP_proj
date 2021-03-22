@@ -7,9 +7,16 @@
 
 <h1>Employee Home</h1>
 
-<p>
-    <a asp-action="Create">Create New Employee</a>
-</p>
+@if (Model.Employees.Count < 1)
+{
+    <p>
+        <a asp-action="Create">Create Your Employee Profile</a>
+    </p>
+}
+else
+{
+    <h2>Welcome back <i> @Model.Employees[0].FirstName !</i></h2>
+}
 <table class="table">
     <thead>
         <tr>
@@ -70,7 +77,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var customer in Model.Customers) 
+        @foreach (var customer in Model.Customers)
         {
             <tr>
                 <td>
@@ -86,7 +93,7 @@
                     @Html.DisplayFor(modelItem => customer.ZipCode)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@customer.Id">Details</a> 
+                    <a asp-action="Details" asp-route-id="@customer.Id">Details</a>
                 </td>
             </tr>
         }
