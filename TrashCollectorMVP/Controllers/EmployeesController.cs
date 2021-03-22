@@ -25,8 +25,21 @@ namespace TrashCollectorMVP.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string todaysDayOfTheWeek = DateTime.Today.ToString("dddd");
+
+            List<Employee> currentEmployees = _context.Employees.Where(e => e.IdentityUserId == userId).ToList();
+            List<Customer> todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay)
+                .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Day.Equals(todaysDayOfTheWeek)).ToList();
+            
+            EmployeeCustomerViewModel ecViewModel = new EmployeeCustomerViewModel
+            {
+                Employees = currentEmployees,
+                Customers = todaysCustomers
+            };
             var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            await applicationDbContext.ToListAsync();
+            return View(ecViewModel);
         }
 
         // GET: Employees/Details/5
