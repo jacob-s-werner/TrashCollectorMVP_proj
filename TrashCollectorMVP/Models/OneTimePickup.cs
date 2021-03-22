@@ -8,19 +8,16 @@ using System.Threading.Tasks;
 
 namespace TrashCollectorMVP.Models
 {
-    public class Customer
+    public class OneTimePickup
     {
         [Key]
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Address { get; set; }
+        public DateTime DateForPickup { get; set; }
         public string ZipCode { get; set; }
-        public double? TotalBill { get; set; }
 
-        [ForeignKey("WeeklyPickupDay")]
-        public int WeeklyPickUpDayId { get; set; }
-        public WeeklyPickupDay WeeklyPickUpDay { get; set; }
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
         
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
