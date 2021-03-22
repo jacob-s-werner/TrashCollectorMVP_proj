@@ -192,5 +192,41 @@ namespace TrashCollectorMVP.Controllers
             }
             return View(oneTimePickup);
         }
+
+        // GET: Customers/DeleteOneTimePickup/5
+        public async Task<IActionResult> DeleteOneTimePickup(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var oneTimePickup = await _context.OneTimePickups
+                .Include(c => c.IdentityUser)
+                .Include(c => c.Customer)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (oneTimePickup == null)
+            {
+                return NotFound();
+            }
+
+            return View(oneTimePickup);
+        }
+
+        // POST: Customers/DeleteOneTimePickup/5
+        [HttpPost, ActionName("DeleteOneTimePickup")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteOneTimePickupConfirmed(int id)
+        {
+            var oneTimePickup = await _context.OneTimePickups.FindAsync(id);
+            _context.OneTimePickups.Remove(oneTimePickup);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool OneTimePickupExists(int id)
+        {
+            return _context.OneTimePickups.Any(e => e.Id == id);
+        }
     }
 }
