@@ -31,14 +31,18 @@ namespace TrashCollectorMVP.Controllers
             List<Employee> currentEmployees = _context.Employees.Where(e => e.IdentityUserId == userId).ToList();
             List<Customer> todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay)
                 .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Day.Equals(todaysDayOfTheWeek)).ToList();
-            
+
             EmployeeCustomerViewModel ecViewModel = new EmployeeCustomerViewModel
             {
                 Employees = currentEmployees,
-                Customers = todaysCustomers
+                Customers = todaysCustomers,
+                WeeklyPickupDayId = 1
             };
+            
             var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
             await applicationDbContext.ToListAsync();
+            
+            ViewData["WeeklyPickUpDayId"] = new SelectList(_context.WeeklyPickupDays, "Id", "Day");
             return View(ecViewModel);
         }
 
@@ -173,5 +177,26 @@ namespace TrashCollectorMVP.Controllers
         {
             return _context.Employees.Any(e => e.Id == id);
         }
+
+        // GET: Customers/SearchPickupsByDay/5
+        public async Task<IActionResult> SearchPickupsByDay(int WeeklyPickupDayId)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            List<Employee> currentEmployees = _context.Employees.Where(e => e.IdentityUserId == userId).ToList();
+            List<Customer> todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay)
+                .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Id.Equals(WeeklyPickupDayId)).ToList();
+
+            EmployeeCustomerViewModel ecViewModel = new EmployeeCustomerViewModel
+            {
+                Employees = currentEmployees,
+                Customers = todaysCustomers
+            };
+            
+            var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
+            await applicationDbContext.ToListAsync();
+            return View(ecViewModel);
+        }
+
     }
 }

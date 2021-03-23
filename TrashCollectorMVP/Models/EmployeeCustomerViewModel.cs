@@ -9,5 +9,6 @@ namespace TrashCollectorMVP.Models
     {
         public List<Customer> Customers { get; set; }
         public List<Employee> Employees { get; set; }
+        public int? WeeklyPickupDayId { get; set; }
     }
 }

@@ -1,0 +1,54 @@
+﻿@model TrashCollectorMVP.Models.EmployeeCustomerViewModel
+
+@{
+    ViewData["Title"] = "Search Pickups By Day";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Pickups for @Model.Customers[0].WeeklyPickUpDay.Day</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customers[0].ZipCode)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Customers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.ZipCode)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@customer.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back to Home Page</a>
+</div>

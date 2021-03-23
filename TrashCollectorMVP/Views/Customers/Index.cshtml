@@ -16,8 +16,8 @@
 else
 {
     <h2>Welcome back <i> @Model.FirstOrDefault().FirstName !</i></h2>
+    <div><p> Your Total Bill is <h4>$@Math.Round(Model.FirstOrDefault().TotalBill.Value, 2)</h4></p></div>
 }
-<div><p> Your Total Bill is <h4>$@Math.Round(Model.FirstOrDefault().TotalBill.Value,2)</h4></p></div>
 
 <table class="table">
     <thead>
