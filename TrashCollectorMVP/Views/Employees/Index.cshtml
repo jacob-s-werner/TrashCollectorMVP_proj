@@ -59,7 +59,7 @@ else
     <div class="col-md-4">
         <form asp-action="SearchPickupsByDay">
             <div class="form-group">
-                <label asp-for="customerPickupInformationViewModel.Customers.FirstOrDefault().WeeklyPickUpDay" class="control-label"></label>
+                <label asp-for="CustomerPickupInformationViewModel.Customers.FirstOrDefault().WeeklyPickUpDay" class="control-label"></label>
                 <select asp-for="WeeklyPickupDayId" class="form-control" asp-items="ViewBag.WeeklyPickUpDayId"></select>
             </div>
             <div class="form-group">
@@ -76,24 +76,24 @@ else
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].FirstName)
+                @Html.DisplayNameFor(model => model.CustomerPickupInformationViewModel.Customers[0].FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].LastName)
+                @Html.DisplayNameFor(model => model.CustomerPickupInformationViewModel.Customers[0].LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].Address)
+                @Html.DisplayNameFor(model => model.CustomerPickupInformationViewModel.Customers[0].Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].ZipCode)
+                @Html.DisplayNameFor(model => model.CustomerPickupInformationViewModel.Customers[0].ZipCode)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var customer in Model.customerPickupInformationViewModel.Customers)
+        @foreach (var customer in Model.CustomerPickupInformationViewModel.Customers)
         {
-            @foreach (var tempSuspension in Model.customerPickupInformationViewModel.TemporaryPickupSuspensions)
+            @foreach (var tempSuspension in Model.CustomerPickupInformationViewModel.TemporaryPickupSuspensions)
             {
                 @if (customer.Id == tempSuspension.CustomerId && (tempSuspension.StartDate <= DateTime.Today && tempSuspension.EndDate >= DateTime.Today) == false)
                 {
@@ -117,7 +117,7 @@ else
                 }
             }
         }
-        @foreach (var oneTimePickup in Model.customerPickupInformationViewModel.OneTimePickups)
+        @foreach (var oneTimePickup in Model.CustomerPickupInformationViewModel.OneTimePickups)
         {
             <tr>
                 <td>

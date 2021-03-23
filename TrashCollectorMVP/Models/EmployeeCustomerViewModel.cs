@@ -12,7 +12,7 @@ namespace TrashCollectorMVP.Models
         public int? WeeklyPickupDayId { get; set; }
 
         [NotMapped]
-        public CustomerPickupInformationViewModel customerPickupInformationViewModel { get; set; }
+        public CustomerPickupInformationViewModel CustomerPickupInformationViewModel { get; set; }
         public List<Customer> Customers { get; set; }
     }
 }

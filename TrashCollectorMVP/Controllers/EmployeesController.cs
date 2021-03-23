@@ -49,7 +49,7 @@ namespace TrashCollectorMVP.Controllers
             {
                 Employees = currentEmployees,
                 WeeklyPickupDayId = 1,
-                customerPickupInformationViewModel = cpInfoViewModel,
+                CustomerPickupInformationViewModel = cpInfoViewModel,
             };
             
             var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
