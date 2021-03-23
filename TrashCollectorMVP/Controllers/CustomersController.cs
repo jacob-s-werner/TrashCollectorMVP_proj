@@ -26,11 +26,20 @@ namespace TrashCollectorMVP.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<Customer> currentCustomers = _context.Customers.Where(e => e.IdentityUserId == userId).Include(e => e.IdentityUser).Include(e => e.WeeklyPickUpDay).ToList();
+            List<Customer> currentCustomers = _context.Customers.Where(c => c.IdentityUserId == userId).Include(i => i.IdentityUser).Include(w => w.WeeklyPickUpDay).ToList();
+            List<OneTimePickup> oneTimePickups = _context.OneTimePickups.Where(o => o.IdentityUserId == userId).ToList();
+            List<TemporaryPickupSuspension> temporaryPickupSuspensions = _context.TemporaryPickupSuspensions.Where(t => t.IdentityUserId == userId).ToList();
+
+            CustomerPickupInformationViewModel cpInfoViewModel = new CustomerPickupInformationViewModel
+            {
+                Customers = currentCustomers,
+                OneTimePickups = oneTimePickups,
+                TemporaryPickupSuspensions = temporaryPickupSuspensions
+            };
 
             var applicationDbContext = _context.Customers.Include(e => e.IdentityUser);
             await applicationDbContext.ToListAsync();
-            return View(currentCustomers);
+            return View(cpInfoViewModel);
         }
 
         // GET: Customers/Details/5
@@ -102,7 +111,7 @@ namespace TrashCollectorMVP.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Address,ZipCode,WeeklyPickUpDayId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Address,ZipCode,WeeklyPickUpDayId,TotalBill")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -269,16 +278,16 @@ namespace TrashCollectorMVP.Controllers
                 return NotFound();
             }
 
-            var oneTimePickup = await _context.OneTimePickups
+            var temporaryPickupSuspension = await _context.TemporaryPickupSuspensions
                 .Include(c => c.IdentityUser)
                 .Include(c => c.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (oneTimePickup == null)
+            if (temporaryPickupSuspension == null)
             {
                 return NotFound();
             }
 
-            return View(oneTimePickup);
+            return View(temporaryPickupSuspension);
         }
 
         // POST: Customers/DeleteTemporaryPickupSuspension/5
