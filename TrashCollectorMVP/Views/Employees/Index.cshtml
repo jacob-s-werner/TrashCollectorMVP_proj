@@ -16,7 +16,6 @@
 else
 {
     <h2>Welcome back, <i> @Model.Employees[0].FirstName !</i></h2>
-}
 <table class="table">
     <thead>
         <tr>
@@ -54,7 +53,7 @@ else
         }
     </tbody>
 </table>
-                
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="SearchPickupsByDay">
@@ -111,7 +110,7 @@ else
                             @Html.DisplayFor(modelItem => customer.ZipCode)
                         </td>
                         <td>
-                            <a asp-action="Details" asp-route-id="@customer.Id">Details</a>
+                            <a asp-action="ConfirmPickup" asp-route-id="@customer.Id">Confirm Pickup</a>
                         </td>
                     </tr>
                 }
@@ -133,9 +132,10 @@ else
                     @Html.DisplayFor(modelItem => oneTimePickup.ZipCode)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@oneTimePickup.Id">Details</a>
+                    <a asp-action="ConfirmOneTimePickup" asp-route-id="@oneTimePickup.Id">Confirm OneTime Pickup</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+}

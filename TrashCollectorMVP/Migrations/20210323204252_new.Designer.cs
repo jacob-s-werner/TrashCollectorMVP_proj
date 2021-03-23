@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollectorMVP.Data;
 
-namespace TrashCollectorMVP.Data.Migrations
+namespace TrashCollectorMVP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210323193530_AddedLastPickupToCustomer")]
-    partial class AddedLastPickupToCustomer
+    [Migration("20210323204252_new")]
+    partial class @new
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

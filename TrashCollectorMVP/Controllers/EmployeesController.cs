@@ -27,16 +27,27 @@ namespace TrashCollectorMVP.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             string todaysDayOfTheWeek = DateTime.Today.ToString("dddd");
-            
+
+            List<TemporaryPickupSuspension> temporaryPickupSuspensions;
+            List<Customer> todaysCustomers;
+            List<OneTimePickup> oneTimePickups;
+
             List<Employee> currentEmployees = _context.Employees.Where(e => e.IdentityUserId == userId).ToList();
+            if (currentEmployees.Count.Equals(0))
+            {
+                temporaryPickupSuspensions = null;
+                todaysCustomers = null;
+                oneTimePickups = null;
+            }
+            else
+            {
+                temporaryPickupSuspensions = _context.TemporaryPickupSuspensions.Where(t => t.ZipCode.Equals(currentEmployees[0].ZipCode)).ToList();
+                todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay).Include(i => i.IdentityUser)
+                    .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Day.Equals(todaysDayOfTheWeek)).ToList();
+                oneTimePickups = _context.OneTimePickups.Include(c => c.Customer)
+                    .Where(o => o.ZipCode.Equals(currentEmployees[0].ZipCode) && o.DateForPickup.Date.Equals(DateTime.Today)).ToList();
+            }
 
-            List<TemporaryPickupSuspension> temporaryPickupSuspensions = _context.TemporaryPickupSuspensions.Where(t => t.ZipCode.Equals(currentEmployees[0].ZipCode)).ToList();
-
-            List<Customer> todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay).Include(i => i.IdentityUser)
-                .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Day.Equals(todaysDayOfTheWeek)).ToList();
-
-            List<OneTimePickup> oneTimePickups = _context.OneTimePickups.Include(c => c.Customer)
-                .Where(o => o.ZipCode.Equals(currentEmployees[0].ZipCode) && o.DateForPickup.Date.Equals(DateTime.Today)).ToList();
 
             CustomerPickupInformationViewModel cpInfoViewModel = new CustomerPickupInformationViewModel
             {
@@ -211,5 +222,39 @@ namespace TrashCollectorMVP.Controllers
             return View(ecViewModel);
         }
 
+        // GET: Employees/ConfirmPickup/5
+        public async Task<IActionResult> ConfirmPickup(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Customer customer = await _context.Customers.FindAsync(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return View(customer);
+        }
+
+        // POST: Employees/ConfirmPickup/5
+        [HttpPost, ActionName("ConfirmPickup")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmPickup(int id)
+        {
+            Customer customer = await _context.Customers.FindAsync(id);
+            customer.LastPickup = DateTime.Now;
+            customer.TotalBill += 15;
+            _context.Update(customer);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        private bool CustomerExists(int id)
+        {
+            return _context.Customers.Any(e => e.Id == id);
+        }
     }
 }
