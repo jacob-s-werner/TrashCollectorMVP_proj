@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Customer Home Page</h1>
+<h1>Customer Home</h1>
 
 @if (Model.Customers.Count() < 1)
 {
@@ -15,7 +15,7 @@
 }
 else
 {
-    <h2>Welcome back <i> @Model.Customers.FirstOrDefault().FirstName !</i></h2>
+    <h2>Welcome back, <i> @Model.Customers.FirstOrDefault().FirstName !</i></h2>
     <div><p> Your Total Bill is <h4>$@Math.Round(Model.Customers.FirstOrDefault().TotalBill.Value, 2)</h4></p></div>
 }
 

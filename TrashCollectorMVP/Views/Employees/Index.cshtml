@@ -7,7 +7,7 @@
 
 <h1>Employee Home</h1>
 
-@if (Model.Employees.Count < 1)
+@if (Model.Employees.Count() < 1)
 {
     <p>
         <a asp-action="Create">Create Your Employee Profile</a>
@@ -15,7 +15,7 @@
 }
 else
 {
-    <h2>Welcome back <i> @Model.Employees[0].FirstName !</i></h2>
+    <h2>Welcome back, <i> @Model.Employees[0].FirstName !</i></h2>
 }
 <table class="table">
     <thead>
