@@ -17,6 +17,7 @@ namespace TrashCollectorMVP.Models
         public string Address { get; set; }
         public string ZipCode { get; set; }
         public double? TotalBill { get; set; }
+        public DateTime? LastPickup { get; set; }
 
         [ForeignKey("WeeklyPickupDay")]
         public int WeeklyPickUpDayId { get; set; }
