@@ -54,12 +54,12 @@ else
         }
     </tbody>
 </table>
-
+                
 <div class="row">
     <div class="col-md-4">
         <form asp-action="SearchPickupsByDay">
             <div class="form-group">
-                <label asp-for="Customers.FirstOrDefault().WeeklyPickUpDay" class="control-label"></label>
+                <label asp-for="customerPickupInformationViewModel.Customers.FirstOrDefault().WeeklyPickUpDay" class="control-label"></label>
                 <select asp-for="WeeklyPickupDayId" class="form-control" asp-items="ViewBag.WeeklyPickUpDayId"></select>
             </div>
             <div class="form-group">
@@ -76,38 +76,64 @@ else
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].FirstName)
+                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].LastName)
+                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].Address)
+                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Customers[0].ZipCode)
+                @Html.DisplayNameFor(model => model.customerPickupInformationViewModel.Customers[0].ZipCode)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var customer in Model.Customers)
+        @foreach (var customer in Model.customerPickupInformationViewModel.Customers)
+        {
+            @foreach (var tempSuspension in Model.customerPickupInformationViewModel.TemporaryPickupSuspensions)
+            {
+                @if (customer.Id == tempSuspension.CustomerId && (tempSuspension.StartDate <= DateTime.Today && tempSuspension.EndDate >= DateTime.Today) == false)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => customer.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => customer.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => customer.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => customer.ZipCode)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@customer.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+        @foreach (var oneTimePickup in Model.customerPickupInformationViewModel.OneTimePickups)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => customer.FirstName)
+                    @Html.DisplayFor(modelItem => oneTimePickup.Customer.FirstName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => customer.LastName)
+                    @Html.DisplayFor(modelItem => oneTimePickup.Customer.LastName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => customer.Address)
+                    @Html.DisplayFor(modelItem => oneTimePickup.Customer.Address)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => customer.ZipCode)
+                    @Html.DisplayFor(modelItem => oneTimePickup.ZipCode)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@customer.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@oneTimePickup.Id">Details</a>
                 </td>
             </tr>
         }

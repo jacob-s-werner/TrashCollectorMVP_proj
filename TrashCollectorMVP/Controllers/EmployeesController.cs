@@ -27,16 +27,29 @@ namespace TrashCollectorMVP.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             string todaysDayOfTheWeek = DateTime.Today.ToString("dddd");
-
+            
             List<Employee> currentEmployees = _context.Employees.Where(e => e.IdentityUserId == userId).ToList();
-            List<Customer> todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay)
+
+            List<TemporaryPickupSuspension> temporaryPickupSuspensions = _context.TemporaryPickupSuspensions.Where(t => t.ZipCode.Equals(currentEmployees[0].ZipCode)).ToList();
+
+            List<Customer> todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay).Include(i => i.IdentityUser)
                 .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Day.Equals(todaysDayOfTheWeek)).ToList();
+
+            List<OneTimePickup> oneTimePickups = _context.OneTimePickups.Include(c => c.Customer)
+                .Where(o => o.ZipCode.Equals(currentEmployees[0].ZipCode) && o.DateForPickup.Date.Equals(DateTime.Today)).ToList();
+
+            CustomerPickupInformationViewModel cpInfoViewModel = new CustomerPickupInformationViewModel
+            {
+                Customers = todaysCustomers,
+                OneTimePickups = oneTimePickups,
+                TemporaryPickupSuspensions = temporaryPickupSuspensions
+            };
 
             EmployeeCustomerViewModel ecViewModel = new EmployeeCustomerViewModel
             {
                 Employees = currentEmployees,
-                Customers = todaysCustomers,
-                WeeklyPickupDayId = 1
+                WeeklyPickupDayId = 1,
+                customerPickupInformationViewModel = cpInfoViewModel,
             };
             
             var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
