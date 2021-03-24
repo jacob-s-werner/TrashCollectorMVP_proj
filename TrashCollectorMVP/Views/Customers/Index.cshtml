@@ -1,7 +1,7 @@
 ﻿@model TrashCollectorMVP.Models.CustomerPickupInformationViewModel
 
 @{
-    ViewData["Title"] = "Customer Home Page";
+    ViewData["Title"] = "Customer Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -17,122 +17,121 @@ else
 {
     <h2>Welcome back, <i> @Model.Customers.FirstOrDefault().FirstName !</i></h2>
     <div><p> Your Total Bill is <h4>$@Math.Round(Model.Customers.FirstOrDefault().TotalBill.Value, 2)</h4></p></div>
-}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Customers[0].FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customers[0].LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customers[0].Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customers[0].ZipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Customers[0].WeeklyPickUpDay)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var customer in Model.Customers)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => customer.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => customer.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => customer.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => customer.ZipCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => customer.WeeklyPickUpDay.Day)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@customer.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@customer.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@customer.Id">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customers[0].FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customers[0].LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customers[0].Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customers[0].ZipCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Customers[0].WeeklyPickUpDay)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
-
-<div class="row">
-    <div class="col-lg">
-        <h4> Temporary Suspensions</h4>
-        <a asp-action="CreateTemporaryPickupSuspension">Create A Temporary Suspension</a>
-
-        <table class="table">
-            <thead>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.Customers)
+            {
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.TemporaryPickupSuspensions[0].StartDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.TemporaryPickupSuspensions[0].EndDate)
-                    </th>
-                    <th></th>
+                    <td>
+                        @Html.DisplayFor(modelItem => customer.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => customer.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => customer.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => customer.ZipCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => customer.WeeklyPickUpDay.Day)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@customer.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@customer.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@customer.Id">Delete</a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var temporaryPickupSuspension in Model.TemporaryPickupSuspensions)
-                {
+            }
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-lg">
+            <h4> Temporary Suspensions</h4>
+            <a asp-action="CreateTemporaryPickupSuspension">Create A Temporary Suspension</a>
+
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => temporaryPickupSuspension.StartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => temporaryPickupSuspension.EndDate)
-                        </td>
-                        <td>
-                            <a asp-action="DeleteTemporaryPickupSuspension" asp-route-id="@temporaryPickupSuspension.Id">Delete</a>
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TemporaryPickupSuspensions[0].StartDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.TemporaryPickupSuspensions[0].EndDate)
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var temporaryPickupSuspension in Model.TemporaryPickupSuspensions)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => temporaryPickupSuspension.StartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => temporaryPickupSuspension.EndDate)
+                            </td>
+                            <td>
+                                <a asp-action="DeleteTemporaryPickupSuspension" asp-route-id="@temporaryPickupSuspension.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-    </div>
-    <div class="col-lg">
-        <h4> One Time Pickups</h4>
-        <a asp-action="CreateOneTimePickup">Create A One Time Pickup</a>
+        </div>
+        <div class="col-lg">
+            <h4> One Time Pickups</h4>
+            <a asp-action="CreateOneTimePickup">Create A One Time Pickup</a>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OneTimePickups[0].DateForPickup)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var pickup in Model.OneTimePickups)
-                {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => pickup.DateForPickup)
-                        </td>
-                        <td>
-                            <a asp-action="DeleteOneTimePickup" asp-route-id="@pickup.Id">Delete</a>
-                        </td>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OneTimePickups[0].DateForPickup)
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var pickup in Model.OneTimePickups)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => pickup.DateForPickup)
+                            </td>
+                            <td>
+                                <a asp-action="DeleteOneTimePickup" asp-route-id="@pickup.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
+        </div>
     </div>
-</div>
-
+}
