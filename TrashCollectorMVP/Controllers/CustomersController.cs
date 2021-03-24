@@ -170,7 +170,23 @@ namespace TrashCollectorMVP.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
+            foreach (var tempPickupSuspension in _context.TemporaryPickupSuspensions)
+            {
+                if (tempPickupSuspension.CustomerId.Equals(customer.Id))
+                {
+                    _context.Remove(tempPickupSuspension);
+                }
+            }
+            foreach (var oneTimePickup in _context.OneTimePickups)
+            {
+                if (oneTimePickup.CustomerId.Equals(customer.Id))
+                {
+                    _context.Remove(oneTimePickup);
+                }
+            }
+
             _context.Customers.Remove(customer);
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
