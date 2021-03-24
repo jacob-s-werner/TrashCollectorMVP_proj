@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TrashCollectorMVP.Data;
 using TrashCollectorMVP.Models;
+using Velyo.Google.Services;
+using Velyo.Google.Services.Models;
 
 namespace TrashCollectorMVP.Controllers
 {
@@ -235,6 +237,12 @@ namespace TrashCollectorMVP.Controllers
             {
                 return NotFound();
             }
+            
+            GeocodingRequest request = new GeocodingRequest(customer.Address +" "+ customer.ZipCode);
+            GeocodingResponse response = await request.GetResponseAsync();
+            LatLng location = response.Results[0].Geometry.Location;
+            customer.Latitude = location.Latitude;
+            customer.Longitude = location.Longitude;
 
             return View(customer);
         }

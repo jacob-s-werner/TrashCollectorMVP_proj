@@ -95,7 +95,7 @@ else
         {
             @foreach (var tempSuspension in Model.CustomerPickupInformationViewModel.TemporaryPickupSuspensions)
             {
-                @if (customer.Id == tempSuspension.CustomerId && (tempSuspension.StartDate <= DateTime.Today && tempSuspension.EndDate >= DateTime.Today) == false)
+                @if (customer.Id != tempSuspension.CustomerId || (customer.Id == tempSuspension.CustomerId && ((tempSuspension.StartDate <= DateTime.Today && tempSuspension.EndDate >= DateTime.Today) == false)) == true)
                 {
                     <tr>
                         <td>

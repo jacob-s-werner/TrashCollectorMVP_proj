@@ -26,5 +26,11 @@ namespace TrashCollectorMVP.Models
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+
+        [NotMapped]
+        public double Longitude { get; set; }
+        
+        [NotMapped]
+        public double Latitude { get; set; }
     }
 }
