@@ -47,9 +47,9 @@ namespace TrashCollectorMVP.Controllers
             {
                 temporaryPickupSuspensions = _context.TemporaryPickupSuspensions.Where(t => t.ZipCode.Equals(currentEmployees[0].ZipCode)).ToList();
                 todaysCustomers = _context.Customers.Include(c => c.WeeklyPickUpDay).Include(i => i.IdentityUser)
-                    .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Day.Equals(todaysDayOfTheWeek)).ToList();
+                    .Where(c => c.ZipCode.Equals(currentEmployees[0].ZipCode) && c.WeeklyPickUpDay.Day.Equals(todaysDayOfTheWeek) && c.LastPickup.Value.Date != DateTime.Today).ToList();
                 oneTimePickups = _context.OneTimePickups.Include(c => c.Customer)
-                    .Where(o => o.ZipCode.Equals(currentEmployees[0].ZipCode) && o.DateForPickup.Date.Equals(DateTime.Today)).ToList();
+                    .Where(o => o.ZipCode.Equals(currentEmployees[0].ZipCode) && o.DateForPickup.Date.Equals(DateTime.Today) && o.Customer.LastPickup.Value.Date != DateTime.Today).ToList();
             }
 
 
