@@ -99,7 +99,7 @@ else
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => customer.FirstName)
+                            <a asp-action="CustomerProfileDetails" asp-route-id="@customer.Id">@Html.DisplayFor(modelItem => customer.FirstName)</a>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => customer.LastName)
@@ -121,7 +121,7 @@ else
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => oneTimePickup.Customer.FirstName)
+                    <a asp-action="CustomerProfileDetails" asp-route-id="@oneTimePickup.Customer.Id">@Html.DisplayFor(modelItem => oneTimePickup.Customer.FirstName)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => oneTimePickup.Customer.LastName)

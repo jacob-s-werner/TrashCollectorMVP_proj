@@ -319,5 +319,36 @@ namespace TrashCollectorMVP.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: Employees/CustomerProfileDetails/5
+        public async Task<IActionResult> CustomerProfileDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customer = await _context.Customers
+                .Include(e => e.IdentityUser)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            string address = customer.Address;
+            string requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?key={1}&address={0}&sensor=false", Uri.EscapeDataString(address), "AIzaSyBgx90LvORvn6zHVDRBehxL08wimqWfyTM");
+
+            WebRequest request = WebRequest.Create(requestUri);
+            WebResponse response = request.GetResponse();
+            XDocument xdoc = XDocument.Load(response.GetResponseStream());
+
+            XElement result = xdoc.Element("GeocodeResponse").Element("result");
+            XElement locationElement = result.Element("geometry").Element("location");
+            customer.Latitude = (double)locationElement.Element("lat");
+            customer.Longitude = (double)locationElement.Element("lng");
+
+            return View(customer);
+        }
     }
 }

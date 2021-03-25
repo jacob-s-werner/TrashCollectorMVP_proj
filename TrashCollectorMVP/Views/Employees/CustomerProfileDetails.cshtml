@@ -1,0 +1,78 @@
+﻿@model TrashCollectorMVP.Models.Customer
+
+@{
+    ViewData["Title"] = "Customer Profile Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <style type="text/css">
+        #map {
+            height: 400px;
+            width: 450px;
+        }
+    </style>
+    <script>
+        function initMap() {
+            const custAddress = { lat: @Model.Latitude , lng: @Model.Longitude };
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: custAddress,
+            });
+            const marker = new google.maps.Marker({
+                position: custAddress,
+                map: map,
+            });
+        }
+    </script>
+</head>
+
+<h1>Customer Profile Details</h1>
+
+<div>
+    <div class="col">
+        <h4>Customer</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ZipCode)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.WeeklyPickUpDay)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.WeeklyPickUpDay.Id)
+            </dd>
+        </dl>
+    </div>
+
+    <div class="col">
+        <h3>Address Location</h3>
+        <div id="map"></div>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgx90LvORvn6zHVDRBehxL08wimqWfyTM&callback=initMap&libraries=&v=weekly"
+                async></script>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
