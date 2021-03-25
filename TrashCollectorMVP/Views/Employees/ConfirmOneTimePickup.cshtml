@@ -4,44 +4,73 @@
     ViewData["Title"] = "Confirm OneTime Pickup";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <style type="text/css">
+        #map {
+            height: 400px;
+            width: 450px;
+        }
+    </style>
+    <script>
+        function initMap() {
+            const custAddress = { lat: @Model.Customer.Latitude , lng: @Model.Customer.Longitude };
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: custAddress,
+            });
+            const marker = new google.maps.Marker({
+                position: custAddress,
+                map: map,
+            });
+        }
+    </script>
+</head>
 
 <h1>Confirm Customer One Time Pickup</h1>
 
 <div>
-    <h4>Customer</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Customer.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ZipCode)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ZipCode)
-        </dd>
-    </dl>
-</div>
-<p> This will charge Customer <i><b>$15</b></i> </p>
-<div>
-    <form asp-action="ConfirmOneTimePickup">
-        <input type="hidden" asp-for="@Model.Id" />
-        <input type="submit" value="Confirm OneTime Pickup" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+    <div class="col">
+        <h4>Customer</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.FirstName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Customer.FirstName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.LastName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Customer.LastName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Customer.Address)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Customer.Address)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ZipCode)
+            </dd>
+        </dl>
+        </div>
+        <div class="col">
+            <h3>Address Location</h3>
+            <div id="map"></div>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgx90LvORvn6zHVDRBehxL08wimqWfyTM&callback=initMap&libraries=&v=weekly"
+                    async></script>
+        </div>
+    </div>
+    <p> This will charge Customer <i><b>$15</b></i> </p>
+    <div>
+        <form asp-action="ConfirmOneTimePickup">
+            <input type="hidden" asp-for="@Model.Id" />
+            <input type="submit" value="Confirm OneTime Pickup" class="btn btn-danger" /> |
+            <a asp-action="Index">Back to List</a>
+        </form>
+    </div>
