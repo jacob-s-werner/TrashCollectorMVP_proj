@@ -12,6 +12,8 @@ namespace TrashCollectorMVP.Models
     {
         [Key]
         public int Id { get; set; }
+        
+        [Display(Name = "Date For Pickup")]
         public DateTime DateForPickup { get; set; }
         public string ZipCode { get; set; }
 
